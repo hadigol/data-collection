@@ -1,0 +1,30 @@
+name: Merge base and head branch check
+
+on:
+  pull_request:
+
+jobs:
+  check-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: merging into stage
+        if: github.base_ref == 'stage' && github.head_ref != 'devel'
+        run: |
+          echo "Merges into Stage Must come from devel"
+          exit 1
+      
+      - name: merging into prod
+        if: github.base_ref == 'prod' && github.head_ref != 'stage'
+        run: |
+          echo "Merges into Prod Must come from Stage"
+          exit 1
+
+      - name: merging into devel
+        if: github.base_ref == 'devel'
+        run: |
+          echo "PR merging into devel, checking name convetions"
+          if [[ ! "${{github.head_ref }}" =~ ^(feature|bugfix)/ ]]; then
+            echo "ERROR: PR source branch into devel must start with either feature/ or bugfix/"
+            exit 1
+          fi
+

@@ -21,3 +21,17 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#terraform
+/.terraform
+terraform/devel/.terraform/modules/modules.json
+terraform/devel/.terraform.lock.hcl
+.gitignore
+.gitignore
+terraform/devel/.terraform/providers/registry.terraform.io/hashicorp/aws/6.4.0/darwin_arm64/terraform-provider-aws_v6.4.0_x5
+.gitignore
+terraform/stage/.terraform/providers/registry.terraform.io/hashicorp/aws/6.4.0/darwin_arm64/LICENSE.txt
+terraform/stage/.terraform/providers/registry.terraform.io/hashicorp/aws/6.4.0/darwin_arm64/terraform-provider-aws_v6.4.0_x5
+terraform/stage/.terraform/modules/modules.json
+.gitignore
+terraform/devel/.terraform/providers/registry.terraform.io/hashicorp/aws/6.4.0/darwin_arm64/LICENSE.txt

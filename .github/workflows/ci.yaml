@@ -68,8 +68,9 @@ jobs:
           name: upload-build
           path: public
 
-  setup-terraform:
+  setup-terraform-deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.base_ref }}
     needs:
       - check-merge
       - build

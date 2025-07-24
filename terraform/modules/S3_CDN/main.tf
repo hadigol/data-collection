@@ -29,7 +29,7 @@ resource "aws_s3_bucket_acl" "default" {
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = "default OAC"
+  name                              = var.bucket_name
   description                       = "OAC Policy"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"

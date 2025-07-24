@@ -3,7 +3,7 @@ output "endpoint"{
 }
 
 output "bucket_name"{
-    value="${var.env}-${var.bucket_name}"
+    value=module.s3_cdn.bucket_name
 }
 
 output "cloudfront_distribution_id"{

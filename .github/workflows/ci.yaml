@@ -61,9 +61,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-      
-      - name: Show contents before upload
-        run: ls -R public/
 
       - name : upload artifact
         uses: actions/upload-artifact@v4
@@ -126,14 +123,6 @@ jobs:
         with:
           name: upload-build
           path: build/
-      - name: Display current folder
-        run: ls -R .
-
-      - name: Display folder below
-        run: ls -R ../
-
-      - name: Display 2 folders below
-        run: ls -R ../../
 
       - name: Copy build artifacts to S3
         run: |

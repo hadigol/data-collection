@@ -7,7 +7,7 @@ variable "region" {
 
 variable "bucket_name"{
     type=string
-    default = "fullstack-prod"
+    default = "fullstack"
 }
 
 variable "tags"{
@@ -16,4 +16,8 @@ variable "tags"{
         Environment = "prod"
         Project = "FullStack"
     }
+}
+
+variable "env" {
+  default = "prod"
 }

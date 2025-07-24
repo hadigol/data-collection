@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "website_bucket" {
 }
 
 locals {
-  s3_origin_id = "myS3Origin"
+  s3_origin_id = var.bucket_name
 }
 
 resource "aws_s3_bucket" "log_bucket" {
@@ -25,11 +25,11 @@ resource "aws_s3_bucket_acl" "default" {
   depends_on = [aws_s3_bucket_ownership_controls.ownership_logs]
 
   bucket = aws_s3_bucket.log_bucket.id
-  acl    = "private"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = "default OAC"
+  name                              = var.bucket_name
   description                       = "OAC Policy"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -37,6 +37,7 @@ resource "aws_cloudfront_origin_access_control" "default" {
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
+  depends_on = [ aws_s3_bucket_acl.default ]
   origin {
     domain_name              = aws_s3_bucket.website_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.default.id
@@ -132,4 +133,51 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+}
+
+resource "aws_s3_bucket_policy" "s3_cloudfront_policy" {
+  bucket = aws_s3_bucket.website_bucket.id
+  policy = jsonencode({
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "${aws_s3_bucket.website_bucket.arn}/*",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": "arn:aws:cloudfront::734579227127:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
+        }
+      }
+    }
+  ]
+  })
+}
+
+resource "aws_s3_bucket_policy" "logs_policy" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontLogs"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:*"
+        Resource = "${aws_s3_bucket.log_bucket.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceAccount" = "734579227127"
+          }
+        }
+      }
+    ]
+  })
 }

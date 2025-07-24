@@ -103,11 +103,11 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      - name: Terraform Apply
+      - name: Terraform Apply - devel
         if: github.base_ref == 'devel'
         run: terraform apply -var="env=devel-${{github.run_id}}" -auto-approve
 
-      - name: Terraform Apply
+      - name: Terraform Apply - prod & stage
         if: github.base_ref != 'devel'
         run: terraform apply -auto-approve
 
@@ -125,13 +125,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: upload-build
-          path: public/
+          path: build/
       - name: Display current folder
         run: ls -R .
 
       - name: Display folder below
         run: ls -R ../
 
+      - name: Display 2 folders below
+        run: ls -R ../../
 
       - name: Copy build artifacts to S3
         run: |

@@ -37,6 +37,7 @@ resource "aws_cloudfront_origin_access_control" "default" {
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
+  depends_on = [ aws_s3_bucket_acl.default ]
   origin {
     domain_name              = aws_s3_bucket.website_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.default.id

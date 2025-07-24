@@ -25,7 +25,7 @@ resource "aws_s3_bucket_acl" "default" {
   depends_on = [aws_s3_bucket_ownership_controls.ownership_logs]
 
   bucket = aws_s3_bucket.log_bucket.id
-  acl    = "private"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {

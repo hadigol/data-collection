@@ -133,3 +133,50 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cloudfront_default_certificate = true
   }
 }
+
+resource "aws_s3_bucket_policy" "s3_cloudfront_policy" {
+  bucket = aws_s3_bucket.website_bucket
+  policy = jsonencode({
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "${aws_s3_bucket.website_bucket.arn}/*",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": "arn:aws:cloudfront::734579227127:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
+        }
+      }
+    }
+  ]
+  })
+}
+
+resource "aws_s3_bucket_policy" "logs_policy" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontLogs"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:*"
+        Resource = "${aws_s3_bucket.log_bucket.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceAccount" = "734579227127"
+          }
+        }
+      }
+    ]
+  })
+}

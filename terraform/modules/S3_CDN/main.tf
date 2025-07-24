@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "website_bucket" {
 }
 
 locals {
-  s3_origin_id = "myS3Origin"
+  s3_origin_id = var.bucket_name
 }
 
 resource "aws_s3_bucket" "log_bucket" {

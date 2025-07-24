@@ -101,7 +101,7 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -var="env=devel-${{github.sha}}" -auto-approve
+        run: terraform apply -var="env=devel-${{github.run_id}}" -auto-approve
 
       - name: Get Terraform Output-Bucket Name
         id: tf_output_bucket_name

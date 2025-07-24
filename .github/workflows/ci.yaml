@@ -118,6 +118,8 @@ jobs:
         with:
           name: upload-build
           path: public/
+      - name: Display structure of downloaded files
+        run: ls -R public/
 
       - name: Copy build artifacts to S3
         run: |

@@ -135,7 +135,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 }
 
 resource "aws_s3_bucket_policy" "s3_cloudfront_policy" {
-  bucket = aws_s3_bucket.website_bucket
+  bucket = aws_s3_bucket.website_bucket.id
   policy = jsonencode({
   "Version": "2012-10-17",
   "Statement": [

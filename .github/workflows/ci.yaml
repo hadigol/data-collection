@@ -130,5 +130,5 @@ jobs:
             --paths "/*"
 
       - name: Destroy Terraform
-        if: always()
+        if: always() && github.base_ref == 'devel'
         run: terraform destroy -auto-approve

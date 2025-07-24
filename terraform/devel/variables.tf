@@ -7,7 +7,11 @@ variable "region" {
 
 variable "bucket_name"{
     type=string
-    default = "fullstack-dev"
+    default = "fullstack"
+}
+
+variable "env"{
+    default = "dev"
 }
 
 variable "tags"{

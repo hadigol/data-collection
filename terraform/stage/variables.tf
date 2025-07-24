@@ -17,3 +17,7 @@ variable "tags"{
         Project = "FullStack"
     }
 }
+
+variable "env" {
+  default = "stage"
+}

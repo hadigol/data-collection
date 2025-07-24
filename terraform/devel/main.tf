@@ -15,6 +15,6 @@ provider "aws" {
 
 module "s3_cdn"{
     source = "../modules/S3_CDN"
-    bucket_name = var.bucket_name
+    bucket_name = "${var.env}-${var.bucket_name}"
     tags = var.tags
 }
